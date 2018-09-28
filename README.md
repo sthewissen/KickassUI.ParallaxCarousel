@@ -1,0 +1,1 @@
+# KickassUI.ParallaxCarousel
