@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="KickassUI.ParallaxCarousel.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <OnPlatform x:Key="font_extrabold" x:TypeArguments="x:String">
+                <On Platform="Android" Value="Montserrat-ExtraBold.ttf#Montserrat-ExtraBold" />
+                <On Platform="iOS" Value="Montserrat-ExtraBold" />
+            </OnPlatform>
+            <OnPlatform x:Key="font_bold" x:TypeArguments="x:String">
+                <On Platform="Android" Value="Montserrat-Bold.ttf#Montserrat-Bold" />
+                <On Platform="iOS" Value="Montserrat-Bold" />
+            </OnPlatform>
+            <OnPlatform x:Key="font_regular" x:TypeArguments="x:String">
+                <On Platform="Android" Value="Montserrat-Regular.ttf#Montserrat-Regular" />
+                <On Platform="iOS" Value="Montserrat-Regular" />
+            </OnPlatform>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
