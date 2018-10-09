@@ -6,4 +6,4 @@ A Xamarin.Forms version of a parallax carousel to prove you can create goodlooki
 - LiveXAML – Live simulator updates for your XAML code – http://www.livexaml.com
  
 ## The end result
-<img src="https://github.com/jsuarezruiz/xamarin-forms-goodlooking-UI/blob/master/images/parallaxcarousel.gif" width="600" />
+<img src="https://github.com/jsuarezruiz/xamarin-forms-goodlooking-UI/blob/master/images/parallaxcarousel.gif" width="400" />
