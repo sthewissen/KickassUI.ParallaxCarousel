@@ -5,14 +5,7 @@ namespace KickassUI.ParallaxCarousel.Controls
 { 
     public class RoundedButton : Button
     {
-        public static readonly BindableProperty PaddingProperty = BindableProperty.Create(nameof(Padding), typeof(Thickness), typeof(RoundedButton), new Thickness(0, 0, 0, 0));
-
-        public Thickness Padding
-        {
-            get { return (Thickness)GetValue(PaddingProperty); }
-            set { SetValue(PaddingProperty, value); }
-        }
-
+        
         private bool _measured = false;
         private bool _self = false;
 
