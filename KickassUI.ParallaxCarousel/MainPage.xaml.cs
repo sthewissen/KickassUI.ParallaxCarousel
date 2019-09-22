@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CarouselView.FormsPlugin.Abstractions;
+using KickassUI.ParallaxCarousel.Models;
 using KickassUI.ParallaxCarousel.ViewModels;
 using Xamarin.Forms;
 
@@ -11,63 +8,41 @@ namespace KickassUI.ParallaxCarousel
 {
     public partial class MainPage : ContentPage
     {
-        private int _currentIndex;
         private List<Color> _backgroundColors = new List<Color>();
-
-        public Wrapper Wrapper { get; set; }
 
         public MainPage()
         {
             InitializeComponent();
 
-            Wrapper = new Wrapper
+            var model = new MainPageViewModel
             {
-                Items = new List<CarouselItem>() 
+                Items = new List<CarouselItem>()
                 {
                     // Just create some dummy data here for now.
-                    new CarouselItem{ Position=0, Type="JUICY AND ORANGE", ImageSrc="oranges.png", Name = "ORANGE AWESOMENESS", Price = 120, Title = "ORANGE AWESOMENESS", BackgroundColor= Color.FromHex("#9866d5"), StartColor=Color.FromHex("#f3463f"),  EndColor=Color.FromHex("#fece49")},
-                    new CarouselItem{ Position=0, Type="NOT A TYPICAL FRUIT", ImageSrc="tomato.png", Name = "TERRIBLE TOMATO", Price = 129, Title = "TERRIBLE TOMATO", BackgroundColor= Color.FromHex("#fab62a"), StartColor=Color.FromHex("#42a7ff"),  EndColor=Color.FromHex("#fab62a")},
-                    new CarouselItem{ Position=0, Type="SWEET AND GREEN", ImageSrc="pear.png", Name = "PEAR PARTY", Price = 140, Title = "PEAR PARTY", BackgroundColor= Color.FromHex("#425cfc"), StartColor=Color.FromHex("#33ccf3"),  EndColor=Color.FromHex("#ccee44")}
+                    new CarouselItem{ Type="JUICY AND ORANGE", ImageSrc="oranges.png", Name = "ORANGE AWESOMENESS", Price = 120, Title = "ORANGE AWESOMENESS", BackgroundColor= Color.FromHex("#9866d5"), StartColor=Color.FromHex("#f3463f"),  EndColor=Color.FromHex("#fece49")},
+                    new CarouselItem{ Type="NOT A TYPICAL FRUIT", ImageSrc="tomato.png", Name = "TERRIBLE TOMATO", Price = 129, Title = "TERRIBLE TOMATO", BackgroundColor= Color.FromHex("#fab62a"), StartColor=Color.FromHex("#42a7ff"),  EndColor=Color.FromHex("#fab62a")},
+                    new CarouselItem{ Type="SWEET AND GREEN", ImageSrc="pear.png", Name = "PEAR PARTY", Price = 140, Title = "PEAR PARTY", BackgroundColor= Color.FromHex("#425cfc"), StartColor=Color.FromHex("#33ccf3"),  EndColor=Color.FromHex("#ccee44")}
                 }
             };
 
-            this.BindingContext = Wrapper;
+            BindingContext = model;
 
             // Create out a list of background colors based on our items colors so we can do a gradient on scroll.
-            for (int i = 0; i < Wrapper.Items.Count; i++)
+            for (int i = 0; i < model.Items.Count; i++)
             {
-                var current = Wrapper.Items[i];
-                var next = Wrapper.Items.Count > i + 1 ? Wrapper.Items[i + 1] : null;
+                var current = model.Items[i];
+                var next = model.Items.Count > i + 1 ? model.Items[i + 1] : null;
 
                 if (next != null)
-                    _backgroundColors.AddRange(SetGradients(current.BackgroundColor, next.BackgroundColor, 100));
+                    _backgroundColors.AddRange(SetGradients(current.BackgroundColor, next.BackgroundColor, 375));
                 else
                     _backgroundColors.Add(current.BackgroundColor);
             }
         }
 
-        protected override void OnAppearing()
+        public void Handle_Scrolled(object sender, ItemsViewScrolledEventArgs e)
         {
-            base.OnAppearing();
-
-            // Need to start somewhere...
-            page.BackgroundColor = _backgroundColors.First();
-        }
-
-        public void Handle_PositionSelected(object sender, PositionSelectedEventArgs e)
-        {
-            _currentIndex = e.NewValue;
-            Wrapper.SlidePosition = 0;
-        }
-
-        public void Handle_Scrolled(object sender, CarouselView.FormsPlugin.Abstractions.ScrolledEventArgs e)
-        {
-            int position = 0;
-
-            if (e.Direction == ScrollDirection.Right)
-                position = (int)((_currentIndex * 100) + e.NewValue);
-            else if (e.Direction == ScrollDirection.Left)
-                position = (int)((_currentIndex * 100) - e.NewValue);
+            var position = e.HorizontalOffset;
 
             // Set the background color of our page to the item in the color gradient
             // array, matching the current scrollindex.
@@ -76,31 +51,15 @@ namespace KickassUI.ParallaxCarousel
             else if (position < 0)
                 page.BackgroundColor = _backgroundColors.First();
             else
-                page.BackgroundColor = _backgroundColors[position];
+                page.BackgroundColor = _backgroundColors[(int)position];
+        }
 
-            // Save the current scroll position
-            Wrapper.SlidePosition = e.NewValue;
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
 
-            if (e.Direction == ScrollDirection.Right)
-            {
-                // When scrolling right, we offset the current item and the next one.
-                Wrapper.Items[_currentIndex].Position = -Wrapper.SlidePosition;
-
-                if (_currentIndex < Wrapper.Items.Count - 1)
-                {
-                    Wrapper.Items[_currentIndex + 1].Position = 100 - Wrapper.SlidePosition;
-                }
-            }
-            else if (e.Direction == ScrollDirection.Left)
-            {
-                // When scrolling left, we offset the current item and the previous one.
-                Wrapper.Items[_currentIndex].Position = Wrapper.SlidePosition;
-
-                if (_currentIndex > 0)
-                {
-                    Wrapper.Items[_currentIndex - 1].Position = -100 + Wrapper.SlidePosition;
-                }
-            }
+            // Need to start somewhere...
+            page.BackgroundColor = _backgroundColors.First();
         }
 
         // Create a list of all the colors in between our start and end color.
@@ -113,7 +72,7 @@ namespace KickassUI.ParallaxCarousel
             double gStep = ((end.G * 255) - (start.G * 255)) / steps;
             double bStep = ((end.B * 255) - (start.B * 255)) / steps;
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < steps; i++)
             {
                 var a = (start.A * 255) + (int)(aStep * i);
                 var r = (start.R * 255) + (int)(rStep * i);

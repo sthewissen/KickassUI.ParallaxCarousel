@@ -1,12 +1,7 @@
-﻿using System;
-
+﻿
 using Android.App;
 using Android.Content.PM;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
 using Android.OS;
-using CarouselView.FormsPlugin.Android;
 
 namespace KickassUI.ParallaxCarousel.Droid
 {
@@ -19,10 +14,9 @@ namespace KickassUI.ParallaxCarousel.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            global::Xamarin.Forms.Forms.SetFlags("CollectionView_Experimental");
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
-
-            CarouselViewRenderer.Init();
         }
     }
 }

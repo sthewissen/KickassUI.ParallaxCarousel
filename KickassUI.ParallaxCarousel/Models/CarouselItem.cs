@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Xamarin.Forms;
 
-namespace KickassUI.ParallaxCarousel.ViewModels
+namespace KickassUI.ParallaxCarousel.Models
 {
     public class CarouselItem : INotifyPropertyChanged
     {
@@ -15,24 +15,37 @@ namespace KickassUI.ParallaxCarousel.ViewModels
         public Color BackgroundColor { get; set; }
         public string Type { get; set; }
         public string ImageSrc { get; set; }
-        public int Rotation { get; set; }
         public string Description { get; set; } = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean pretium dolor sed felis varius, at elementum nunc blandit.";
 
-        double _position;
-        public event PropertyChangedEventHandler PropertyChanged;
+        private double _position;
+        private double _scale;
+
+        public CarouselItem()
+        {
+            Scale = 1;
+        }
 
         public double Position
         {
             get { return _position; }
             set
             {
-                if (_position != value)
-                {
-                    _position = value;
-                    OnPropertyChanged();
-                }
+                _position = value;
+                OnPropertyChanged();
             }
         }
+
+        public double Scale
+        {
+            get { return _scale; }
+            set
+            {
+                _scale = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {

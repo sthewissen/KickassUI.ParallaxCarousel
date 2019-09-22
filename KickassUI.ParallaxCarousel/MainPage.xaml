@@ -1,38 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:KickassUI.ParallaxCarousel" x:Class="KickassUI.ParallaxCarousel.MainPage" xmlns:custom="clr-namespace:KickassUI.ParallaxCarousel.Controls" xmlns:controls="clr-namespace:CarouselView.FormsPlugin.Abstractions;assembly=CarouselView.FormsPlugin.Abstractions">
-    <Grid x:Name="page">
-        <controls:CarouselViewControl x:Name="carousel" PositionSelected="Handle_PositionSelected" Scrolled="Handle_Scrolled" Orientation="Horizontal" ShowIndicators="true" IndicatorsTintColor="#CCFFFFFF" CurrentPageIndicatorTintColor="#FFFFFF" IndicatorsShape="Square" InterPageSpacing="0" ItemsSource="{Binding Items}"
-            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">
-            <controls:CarouselViewControl.ItemTemplate>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="KickassUI.ParallaxCarousel.MainPage"
+             xmlns:custom="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView"
+             xmlns:behaviors="clr-namespace:KickassUI.ParallaxCarousel.Behaviors">
+    <Grid x:Name="page" Padding="0,60">
+        <Label x:Name="debug" HorizontalOptions="Center" TextColor="#fff" />
+        <CarouselView x:Name="carousel"  Scrolled="Handle_Scrolled" ItemsSource="{Binding Items}"
+            VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand">                
+            <CarouselView.Behaviors>
+                <behaviors:CarouselViewParallaxBehavior ParallaxOffset="100"/>
+            </CarouselView.Behaviors>
+            <CarouselView.ItemTemplate>
                 <DataTemplate>
                     <Grid Padding="32,64,32,64">
-                        <custom:RoundedContentView CornerRadius="32" BackgroundColor="#FFFFFF">
+                        <custom:PancakeView CornerRadius="32" BackgroundColor="#FFFFFF">
                             <StackLayout VerticalOptions="Fill" HorizontalOptions="Fill">
-                                <custom:RoundedContentView VerticalOptions="FillAndExpand" HeightRequest="400" CornerRadius="32" HasBackgroundGradient="true" GradientStartColor="{Binding StartColor}" GradientEndColor="{Binding EndColor}">
+                                <custom:PancakeView VerticalOptions="FillAndExpand" HeightRequest="400" CornerRadius="32"
+                                                    BackgroundGradientStartColor="{Binding StartColor}"
+                                                    BackgroundGradientEndColor="{Binding EndColor}">
                                     <Grid>
                                         <Label Text="{Binding Title}" FontFamily="{StaticResource font_extrabold}" HorizontalOptions="Center" TextColor="#55000000" VerticalOptions="End" Margin="0,0,0,24" FontSize="140" FontAttributes="Bold" LineBreakMode="NoWrap" />
                                         <StackLayout>
                                             <StackLayout Orientation="Horizontal">
-                                                <Image TranslationX="{Binding Position}" Source="logo.png" HeightRequest="32" Margin="24,24,24,0" />
+                                                <Image TranslationX="{Binding Position}" Opacity="0.7" Source="logo.png" HeightRequest="32" Margin="24,24,24,0" />
                                                 <Label FontFamily="{StaticResource font_regular}" TranslationX="{Binding Position}" HorizontalOptions="EndAndExpand" Text="{Binding Price, StringFormat='$ {0}'}" TextColor="#FFFFFF" Margin="24,24,24,0" FontSize="18" LineBreakMode="NoWrap" />
                                             </StackLayout>
                                             <Label FontFamily="{StaticResource font_bold}" TranslationX="{Binding Position}" Text="{Binding Name}" TextColor="#FFFFFF" Margin="24,24,24,0" FontSize="16" FontAttributes="Bold" LineBreakMode="NoWrap" />
                                             <Label FontFamily="{StaticResource font_regular}" TranslationX="{Binding Position}" Text="{Binding Description}" TextColor="#FFFFFF" Margin="24,8,24,24" FontSize="12" LineBreakMode="WordWrap" />
                                         </StackLayout>
                                     </Grid>
-                                </custom:RoundedContentView>
+                                </custom:PancakeView>
                                 <StackLayout BackgroundColor="#FFFFFF" VerticalOptions="FillAndExpand" Margin="0,-32,0,32">
                                     <StackLayout VerticalOptions="CenterAndExpand" Margin="0,32,0,0">
-                                        <custom:RoundedButton BackgroundColor="#FFFFFF" TranslationX="{Binding Position}" FontFamily="{StaticResource font_bold}" Padding="20,0" CornerRadius="20" TextColor="{Binding BackgroundColor}" FontSize="12" BorderColor="{Binding BackgroundColor}" BorderWidth="2" HeightRequest="40" Text="WISH LIST" HorizontalOptions="Center" />
+                                        <Button BackgroundColor="#FFFFFF" TranslationX="{Binding Position}" FontFamily="{StaticResource font_bold}" Padding="20,0" CornerRadius="20" TextColor="{Binding BackgroundColor}" FontSize="12" BorderColor="{Binding BackgroundColor}" BorderWidth="2" HeightRequest="40" Text="WISH LIST" HorizontalOptions="Center" />
                                         <Label TranslationX="{Binding Position}" FontFamily="{StaticResource font_regular}" Margin="0,8,0,0" TextColor="Gray" Text="{Binding Type}" FontSize="10" HorizontalOptions="Center" />
                                     </StackLayout>
                                 </StackLayout>
                             </StackLayout>
-                        </custom:RoundedContentView>
-                        <Image TranslationX="{Binding Position}" Source="{Binding ImageSrc}" WidthRequest="300" Rotation="{Binding Rotation}" VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand" Margin="0,0,-56,152" />
+                        </custom:PancakeView>
+                        <Image TranslationX="{Binding Position}" Source="{Binding ImageSrc}" WidthRequest="300" VerticalOptions="EndAndExpand" HorizontalOptions="EndAndExpand" Margin="0,0,-56,152" />
                     </Grid>
                 </DataTemplate>
-            </controls:CarouselViewControl.ItemTemplate>
-        </controls:CarouselViewControl>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
     </Grid>
 </ContentPage>
